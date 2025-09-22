@@ -1,0 +1,10 @@
+
+// Este es un archivo de prueba con errores léxicos
+
+entero variable_con_error@ = 10;  // Error: Carácter '@' no válido en un identificador
+decimal otra_variable$ = 20.5;   // Error: Carácter '$' no válido
+
+// Error: El siguiente carácter '?' es inesperado
+?
+
+// Fin del archivo de prueba con errores.

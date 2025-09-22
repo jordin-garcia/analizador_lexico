@@ -1,0 +1,32 @@
+
+// Este es un archivo de prueba para el analizador léxico
+// Contiene código que debería ser analizado correctamente.
+
+/*
+  Esto es un comentario
+  de varias líneas.
+*/
+
+entero mi_variable = 123;
+decimal mi_decimal = 45.67;
+cadena saludo = "Hola, mundo!";
+cadena despedida = 'Adiós, mundo.';
+
+booleano es_verdadero = verdadero;
+
+si (mi_variable > 100) {
+    // Bloque de código del 'si'
+    mi_variable = mi_variable + 1;
+} sino {
+    // Bloque de código del 'sino'
+    mi_decimal = mi_decimal * 2.0;
+}
+
+mientras (es_verdadero == verdadero) {
+    hacer {
+        // Bucle 'hacer-mientras'
+        es_verdadero = falso;
+    }
+}
+
+// Fin del archivo de prueba
