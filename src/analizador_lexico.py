@@ -20,10 +20,10 @@ class AnalizadorLexico:
         ("CADENA_DOBLE", r'"[^"\\]*(?:\\.[^"\\]*)*"'),
         # Identificadores (soporta mayúsculas, minúsculas y guiones bajos)
         ("IDENTIFICADOR", r"[a-zA-Z_][a-zA-Z0-9_]*"),
-        # Operadores y símbolos
+        # Operadores y símbolos (comparadores ANTES de asignación para prioridad)
+        ("COMPARACION", r"==|!=|<=|>="),
         ("ASIGNACION", r"="),
         ("OPERADOR", r"[+\-*/%]"),
-        ("COMPARACION", r"==|!=|<=|>="),
         ("MENORQUE", r"<"),
         ("MAYORQUE", r">"),
         # Delimitadores
@@ -76,20 +76,31 @@ class AnalizadorLexico:
             list: Lista de tuplas (tipo_token, valor, numero_linea)
         """
         tokens = []
-        linea_num = 1
 
+        # PASO 1: Detectar comentarios de bloque sin cerrar
+        error_comentario = self._detectar_comentario_sin_cerrar(codigo)
+        if error_comentario:
+            return [error_comentario]
+
+        # PASO 2: Detectar cadenas sin cerrar
+        error_cadena = self._detectar_cadena_sin_cerrar(codigo)
+        if error_cadena:
+            return [error_cadena]
+
+        # PASO 3: Análisis léxico normal
         for mo in re.finditer(self.regex_maestra, codigo):
             tipo_token = mo.lastgroup
             valor = mo.group()
 
+            # Calcular número de línea basado en la posición del match
+            linea_num = codigo[: mo.start()].count("\n") + 1
+
             if tipo_token == "NUEVALINEA":
-                linea_num += 1
                 continue
             elif tipo_token == "ESPACIO":
                 continue
             elif tipo_token in ["COMENTARIO_LINEA", "COMENTARIO_BLOQUE"]:
-                # Los comentarios se ignoran pero pueden contener saltos de línea
-                linea_num += valor.count("\n")
+                # Los comentarios se ignoran
                 continue
             elif tipo_token == "ERROR":
                 tokens.append(("ERROR", f"Token inesperado '{valor}'", linea_num))
@@ -101,6 +112,118 @@ class AnalizadorLexico:
                 tokens.append((tipo_token, valor, linea_num))
 
         return tokens
+
+    def _detectar_comentario_sin_cerrar(self, codigo):
+        """
+        Detecta si hay un comentario de bloque sin cerrar.
+
+        Args:
+            codigo (str): El código fuente a analizar
+
+        Returns:
+            tuple o None: Token de error si se detecta comentario sin cerrar, None en caso contrario
+        """
+        # Buscar todos los comentarios de bloque abiertos y cerrados
+        patron_apertura = r"/\*"
+        patron_cierre = r"\*/"
+
+        aperturas = [(m.start(), m.end()) for m in re.finditer(patron_apertura, codigo)]
+        cierres = [(m.start(), m.end()) for m in re.finditer(patron_cierre, codigo)]
+
+        if not aperturas:
+            return None  # No hay comentarios de bloque
+
+        # Emparejar aperturas con cierres
+        i_cierre = 0
+        for apertura_inicio, apertura_fin in aperturas:
+            # Buscar el primer cierre después de esta apertura
+            encontrado_cierre = False
+            while i_cierre < len(cierres):
+                cierre_inicio, _ = cierres[i_cierre]
+                if cierre_inicio > apertura_inicio:
+                    # Encontramos el cierre correspondiente
+                    encontrado_cierre = True
+                    i_cierre += 1
+                    break
+                i_cierre += 1
+
+            # Si esta apertura no tiene cierre, es un error
+            if not encontrado_cierre:
+                linea_num = codigo[:apertura_inicio].count("\n") + 1
+                return (
+                    "ERROR",
+                    "Comentario de bloque sin cerrar: se esperaba '*/' para cerrar el comentario",
+                    linea_num,
+                )
+
+        return None
+
+    def _detectar_cadena_sin_cerrar(self, codigo):
+        """
+        Detecta si hay una cadena sin cerrar.
+
+        Args:
+            codigo (str): El código fuente a analizar
+
+        Returns:
+            tuple o None: Token de error si se detecta cadena sin cerrar, None en caso contrario
+        """
+        # Eliminar comentarios primero para no detectar comillas dentro de comentarios
+        codigo_sin_comentarios = re.sub(r"//.*", "", codigo)  # Comentarios de línea
+        codigo_sin_comentarios = re.sub(
+            r"/\*[\s\S]*?\*/", "", codigo_sin_comentarios
+        )  # Comentarios de bloque
+
+        # Buscar cadenas con comillas simples o dobles
+        i = 0
+        while i < len(codigo_sin_comentarios):
+            char = codigo_sin_comentarios[i]
+
+            # Encontramos el inicio de una cadena
+            if char in ('"', "'"):
+                comilla_tipo = char
+                i += 1
+                cadena_cerrada = False
+
+                # Buscar el cierre de la cadena
+                while i < len(codigo_sin_comentarios):
+                    char_actual = codigo_sin_comentarios[i]
+
+                    # Si encontramos la comilla de cierre (y no está escapada)
+                    if char_actual == comilla_tipo:
+                        # Verificar si está escapada
+                        if i > 0 and codigo_sin_comentarios[i - 1] == "\\":
+                            # Está escapada, continuar
+                            i += 1
+                            continue
+                        else:
+                            # Cadena cerrada correctamente
+                            cadena_cerrada = True
+                            break
+
+                    # Si encontramos un salto de línea antes de cerrar, es un error
+                    if char_actual == "\n":
+                        linea_num = codigo_sin_comentarios[:i].count("\n") + 1
+                        return (
+                            "ERROR",
+                            f"Cadena sin cerrar: se esperaba {comilla_tipo} para cerrar la cadena",
+                            linea_num,
+                        )
+
+                    i += 1
+
+                # Si llegamos al final sin cerrar la cadena
+                if not cadena_cerrada:
+                    linea_num = codigo_sin_comentarios[:i].count("\n") + 1
+                    return (
+                        "ERROR",
+                        f"Cadena sin cerrar: se esperaba {comilla_tipo} para cerrar la cadena",
+                        linea_num,
+                    )
+
+            i += 1
+
+        return None
 
     def obtener_errores(self, tokens):
         """

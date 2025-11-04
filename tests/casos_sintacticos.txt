@@ -1,0 +1,96 @@
+// ========================================
+// CASOS SINTÁCTICOS - ARCHIVO DE PRUEBA
+// ========================================
+
+// CASO 1: Correcto - Declaración simple de variable
+entero x = 10;
+
+// CASO 2: Error - falta punto y coma
+entero y = 20
+
+// CASO 3: Correcto - Declaración con operación
+decimal resultado = 3.14 * 2.0;
+
+// CASO 4: Error - paréntesis sin cerrar en estructura si
+si (x > 5 {
+    x = x + 1;
+}
+
+// CASO 5: Correcto - Función con 2 parámetros
+entero suma(entero a, entero b) {
+    entero resultado = a + b;
+}
+
+// CASO 6: Correcto - Estructura si-sino
+si (x > 10) {
+    x = 0;
+} sino {
+    x = x + 1;
+}
+
+// CASO 7: Error - Falta llave de cierre
+mientras (x < 100) {
+    x = x + 1;
+
+// CASO 8: Correcto - Estructura mientras
+mientras (x < 50) {
+    x = x + 5;
+}
+
+// CASO 9: Correcto - Estructura hacer-mientras
+hacer {
+    x = x - 1;
+} mientras (x > 0)
+
+// CASO 10: Error - Tipo de dato inválido
+numero x = 10;
+
+// CASO 11: Error - Falta operador en expresión
+entero z = 5 5;
+
+// CASO 12: Correcto - Expresión compleja con paréntesis
+entero complejo = (10 + 5) * 2 - 3;
+
+// CASO 13: Error - Comparador inválido (tres iguales)
+si (x === 10) {
+    x = 0;
+}
+
+// CASO 14: Correcto - Función con 3 parámetros
+decimal promedio(decimal a, decimal b, decimal c) {
+    decimal suma = a + b + c;
+    decimal prom = suma / 3.0;
+}
+
+// CASO 15: Correcto - Todos los tipos de datos
+entero edad = 25;
+decimal precio = 99.99;
+cadena nombre = "Juan";
+booleano activo = verdadero;
+
+// CASO 16: Correcto - Todos los operadores aritméticos
+entero suma = 10 + 5;
+entero resta = 10 - 5;
+entero mult = 10 * 5;
+entero div = 10 / 5;
+entero mod = 10 % 5;
+
+// CASO 17: Error - Falta paréntesis izquierdo en función
+entero mal_funcion entero a, entero b) {
+    entero r = a + b;
+}
+
+// CASO 18: Correcto - Estructura si-sino anidada
+si (x > 0) {
+    si (x < 100) {
+        x = 50;
+    } sino {
+        x = 100;
+    }
+} sino {
+    x = 0;
+}
+
+// CASO 19: Error - Falta asignación en declaración de variable
+entero variable_sin_valor;
+

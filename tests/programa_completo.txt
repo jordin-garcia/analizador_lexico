@@ -1,0 +1,160 @@
+// ========================================
+// PROGRAMA COMPLETO - PRUEBA INTEGRAL
+// Debe pasar análisis léxico, sintáctico y semántico
+// ========================================
+
+// ============================================
+// SECCIÓN 1: DECLARACIÓN DE VARIABLES
+// ============================================
+
+entero contador = 0;
+decimal precio = 99.99;
+cadena nombre = "Producto Premium";
+cadena descripcion = 'Descripción del producto';
+booleano activo = verdadero;
+booleano disponible = falso;
+
+// ============================================
+// SECCIÓN 2: DECLARACIÓN DE FUNCIONES
+// ============================================
+
+// Función con 2 parámetros - suma de enteros
+entero sumar(entero a, entero b) {
+    entero resultado = a + b;
+}
+
+// Función con 2 parámetros - multiplicación de decimales
+decimal multiplicar(decimal x, decimal y) {
+    decimal resultado = x * y;
+}
+
+// Función con 3 parámetros - calcular promedio
+decimal calcular_promedio(decimal n1, decimal n2, decimal n3) {
+    decimal suma = n1 + n2 + n3;
+    decimal promedio = suma / 3.0;
+}
+
+// Función con 4 parámetros - operación compleja
+entero operacion_compleja(entero a, entero b, entero c, entero d) {
+    entero temp1 = a + b;
+    entero temp2 = c * d;
+    entero resultado = temp1 - temp2;
+}
+
+// ============================================
+// SECCIÓN 3: ESTRUCTURAS DE CONTROL
+// ============================================
+
+// Estructura SI simple
+si (contador > 0) {
+    contador = contador + 1;
+}
+
+// Estructura SI-SINO
+si (precio > 100.0) {
+    decimal descuento = precio * 0.1;
+    precio = precio - descuento;
+} sino {
+    precio = precio + 5.0;
+}
+
+// Estructura MIENTRAS
+mientras (contador < 10) {
+    contador = contador + 1;
+}
+
+// Estructura HACER - MIENTRAS
+hacer {
+    activo = falso;
+}mientras(disponible == verdadero)
+
+// ============================================
+// SECCIÓN 4: EXPRESIONES COMPLEJAS
+// ============================================
+
+// Operaciones aritméticas
+entero a = 10;
+entero b = 20;
+entero suma = a + b;
+entero resta = a - b;
+entero multiplicacion = a * b;
+entero division = a / b;
+entero modulo = a % b;
+
+// Operaciones con paréntesis
+entero complejo = (10 + 5) * 2 - 3;
+decimal decimal_complejo = (3.14 * 2.0) + (5.5 - 1.5);
+
+// Operaciones mixtas (entero y decimal)
+entero entero_val = 10;
+decimal decimal_val = 3.5;
+decimal resultado_mixto = entero_val + decimal_val;
+
+// Concatenación de cadenas
+cadena saludo = "Hola, ";
+cadena nombre_usuario = "Usuario";
+cadena mensaje = saludo + nombre_usuario;
+
+// ============================================
+// SECCIÓN 5: COMPARACIONES
+// ============================================
+
+// Comparaciones numéricas
+si (a == b) {
+    entero igual = 1;
+}
+
+si (a != b) {
+    entero diferente = 1;
+}
+
+si (a < b) {
+    entero menor = 1;
+}
+
+si (a > b) {
+    entero mayor = 1;
+}
+
+si (a <= b) {
+    entero menor_igual = 1;
+}
+
+si (a >= b) {
+    entero mayor_igual = 1;
+}
+
+// Comparaciones booleanas
+si (activo == verdadero) {
+    activo = falso;
+}
+
+si (disponible == falso) {
+    disponible = verdadero;
+}
+
+// ============================================
+// SECCIÓN 6: ESTRUCTURAS ANIDADAS
+// ============================================
+
+si (contador > 5) {
+    si (activo == verdadero) {
+        contador = 0;
+    } sino {
+        contador = contador - 1;
+    }
+}
+
+mientras (contador < 100) {
+    si (contador % 2 == 0) {
+        contador = contador + 2;
+    } sino {
+        contador = contador + 1;
+    }
+}
+
+// ============================================
+// FIN DEL PROGRAMA
+// ============================================
+
+

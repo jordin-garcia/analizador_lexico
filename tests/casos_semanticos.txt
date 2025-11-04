@@ -1,0 +1,109 @@
+// ========================================
+// CASOS SEMÁNTICOS - ARCHIVO DE PRUEBA
+// ========================================
+
+// CASO 1: Error - variable usada sin declarar
+x = 10;
+
+// CASO 2: Error - tipos incompatibles en asignación
+entero numero = "texto";
+
+// CASO 3: Correcto - declaración y uso normal
+entero a = 5;
+entero b = a + 10;
+
+// CASO 4: Error - variable declarada dos veces
+decimal pi = 3.14;
+decimal pi = 3.1416;
+
+// CASO 5: Correcto - diferentes tipos de datos
+entero contador = 0;
+decimal precio = 99.99;
+cadena nombre = "Producto";
+booleano activo = verdadero;
+
+// CASO 6: Error - función con menos de 2 parámetros
+entero calcular(entero x) {
+    entero resultado = x * 2;
+}
+
+// CASO 7: Correcto - función con 2 parámetros
+entero multiplicar(entero a, entero b) {
+    entero resultado = a * b;
+}
+
+// CASO 8: Correcto - función con 3 parámetros
+decimal promedio(decimal n1, decimal n2, decimal n3) {
+    decimal suma = n1 + n2 + n3;
+    decimal resultado = suma / 3.0;
+}
+
+// CASO 9: Error - operación entre tipos incompatibles
+entero num = 10;
+cadena texto = "hola";
+entero suma = num + texto;
+
+// CASO 10: Error - usar variable de otro tipo en operación numérica
+cadena mensaje = "Hola";
+entero longitud = mensaje * 2;
+
+// CASO 11: Correcto - mezcla de entero y decimal
+entero x = 10;
+decimal y = 3.5;
+decimal resultado = x + y;
+
+// CASO 12: Error - parámetros con nombres duplicados
+entero sumar_mal(entero a, entero a) {
+    entero resultado = a + a;
+}
+
+// CASO 13: Correcto - uso de variable en estructura de control
+entero edad = 18;
+si (edad >= 18) {
+    booleano adulto = verdadero;
+}
+
+// CASO 14: Error - comparación entre tipos incompatibles
+entero numero = 5;
+cadena texto2 = "5";
+si (numero == texto2) {
+    numero = 0;
+}
+
+// CASO 15: Correcto - operaciones booleanas
+booleano encendido = verdadero;
+booleano apagado = falso;
+si (encendido == verdadero) {
+    encendido = falso;
+}
+
+// CASO 16: Correcto - concatenación de cadenas
+cadena uno = "Hola";
+cadena dos = "Mundo";
+cadena mensaje2 = uno + dos;
+
+// CASO 17: Error - función declarada dos veces
+entero sumar(entero a, entero b) {
+    entero r = a + b;
+}
+entero sumar(entero x, entero y) {
+    entero resultado = x + y;
+}
+
+// CASO 18: Correcto - asignación de entero a decimal (conversión implícita)
+entero valor_entero = 10;
+decimal valor_decimal = valor_entero;
+
+// CASO 19: Error - operación módulo con decimales
+decimal c = 10.5;
+decimal d = 3.2;
+decimal resultado_modulo = c % d;
+
+// CASO 20: Correcto - todas las operaciones aritméticas con enteros
+entero num1 = 100;
+entero num2 = 20;
+entero suma_enteros = num1 + num2;
+entero resta = num1 - num2;
+entero mult = num1 * num2;
+entero div = num1 / num2;
+entero mod = num1 % num2;
