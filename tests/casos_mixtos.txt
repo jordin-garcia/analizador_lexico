@@ -1,0 +1,239 @@
+// ========================================
+// CASOS MIXTOS - ARCHIVO DE PRUEBA
+// Contiene errores LÉXICOS, SINTÁCTICOS y SEMÁNTICOS
+// ========================================
+
+// ==========================================
+// SECCIÓN 1: CASOS CORRECTOS
+// ==========================================
+
+// Caso correcto 1: Declaraciones simples válidas
+entero contador = 0;
+decimal precio = 99.99;
+cadena nombre = "Producto";
+booleano activo = verdadero;
+
+// Caso correcto 2: Función con 2 parámetros
+entero sumar(entero a, entero b) {
+    entero resultado = a + b;
+}
+
+// Caso correcto 3: Estructura de control válida
+si (contador > 0) {
+    contador = contador + 1;
+} sino {
+    contador = 0;
+}
+
+// ==========================================
+// SECCIÓN 2: ERRORES LÉXICOS
+// ==========================================
+
+// Error léxico 1: Cadena sin cerrar
+cadena mensaje = "Hola mundo sin cerrar;
+
+// Error léxico 2: Carácter inválido (@)
+entero valor@ = 50;
+
+// ==========================================
+// SECCIÓN 3: ERRORES SINTÁCTICOS
+// ==========================================
+
+// Error sintáctico 1: Falta punto y coma
+entero x = 10
+
+// Error sintáctico 2: Identificador empieza con número
+entero 9variable = 100;
+
+// Error sintáctico 2: Paréntesis sin cerrar
+si (x > 5 {
+    x = x + 1;
+}
+
+// Error sintáctico 3: Falta llave de cierre
+mientras (x < 100) {
+    x = x + 1;
+
+// Error sintáctico 4: Tipo de dato inválido
+numero valor = 10;
+
+// Error sintáctico 5: Falta operador en expresión
+entero suma = 5 5;
+
+// Error sintáctico 6: Operador inválido (**)
+entero potencia = 2 ** 8;
+
+// Error sintáctico 6: Comparador inválido (===)
+si (x === 10) {
+    x = 0;
+}
+
+// Error sintáctico 7: Falta paréntesis en declaración de función
+entero mal_funcion entero a, entero b) {
+    entero r = a + b;
+}
+
+// Error sintáctico 8: Número decimal mal formado
+decimal mal_numero = 12.34.56;
+
+// Error sintáctico 8: Falta asignación en declaración
+entero sin_asignacion;
+
+// ==========================================
+// SECCIÓN 4: ERRORES SEMÁNTICOS
+// ==========================================
+
+// Error semántico 1: Variable usada sin declarar
+variable_no_declarada = 10;
+
+// Error semántico 2: Tipos incompatibles en asignación
+entero num = "texto";
+
+// Error semántico 3: Variable declarada dos veces
+decimal pi = 3.14;
+decimal pi = 3.1416;
+
+// Error semántico 4: Función con menos de 2 parámetros
+entero calcular(entero x) {
+    entero resultado = x * 2;
+}
+
+// Error semántico 5: Operación entre tipos incompatibles
+entero numero = 10;
+cadena texto = "hola";
+entero resultado = numero + texto;
+
+// Error semántico 6: Parámetros duplicados en función
+entero sumar_mal(entero a, entero a) {
+    entero r = a + a;
+}
+
+// Error semántico 7: Función declarada dos veces
+entero multiplicar(entero a, entero b) {
+    entero r = a * b;
+}
+entero multiplicar(entero x, entero y) {
+    entero r = x * y;
+}
+
+// Error semántico 8: Comparación entre tipos incompatibles
+entero edad = 25;
+cadena texto_edad = "25";
+si (edad == texto_edad) {
+    edad = 0;
+}
+
+// Error semántico 9: Operación módulo con decimales
+decimal a = 10.5;
+decimal b = 3.2;
+decimal mod_decimal = a % b;
+
+// Error semántico 10: Variable de tipo cadena en operación numérica
+cadena palabra = "Hola";
+entero longitud = palabra * 2;
+
+// ==========================================
+// SECCIÓN 5: MEZCLA DE CASOS CORRECTOS E INCORRECTOS
+// ==========================================
+
+// Correcto: Mezcla de entero y decimal
+entero entero_val = 10;
+decimal decimal_val = 3.5;
+decimal resultado_correcto = entero_val + decimal_val;
+
+// Error léxico: Identificador con carácter especial
+entero año = 2024;
+
+// Correcto: Estructura hacer-mientras
+hacer {
+    contador = contador - 1;
+} mientras (contador > 0)
+
+// Error sintáctico: Falta cerrar llave en estructura si
+si (activo == verdadero) {
+    contador = 100;
+
+// Correcto: Concatenación de cadenas
+cadena saludo = "Hola";
+cadena mundo = "Mundo";
+cadena mensaje_completo = saludo + mundo;
+
+// Error semántico: Usar variable antes de declararla
+resultado_final = variable_futura + 10;
+entero variable_futura = 5;
+
+// Correcto: Función con 3 parámetros
+decimal promedio(decimal n1, decimal n2, decimal n3) {
+    decimal suma = n1 + n2 + n3;
+    decimal prom = suma / 3.0;
+}
+
+// Error léxico: Comentario de bloque sin cerrar
+/* Este comentario nunca se cierra
+entero valor = 99;
+
+// Correcto: Expresión compleja con paréntesis
+entero complejo = ((10 + 5) * 2 - 3) / 4;
+
+// Error sintáctico: Operador de asignación duplicado
+entero doble_asignacion = = 50;
+
+// Correcto: Todas las operaciones aritméticas
+entero a_num = 100;
+entero b_num = 20;
+entero suma_ab = a_num + b_num;
+entero resta_ab = a_num - b_num;
+entero mult_ab = a_num * b_num;
+entero div_ab = a_num / b_num;
+entero mod_ab = a_num % b_num;
+
+// Error semántico: División por cadena
+entero dividendo = 100;
+cadena divisor = "10";
+entero cociente = dividendo / divisor;
+
+// ==========================================
+// SECCIÓN 6: CASOS COMPLEJOS
+// ==========================================
+
+// Correcto: Estructuras anidadas
+si (contador > 0) {
+    si (contador < 100) {
+        mientras (contador < 50) {
+            contador = contador + 1;
+        }
+    } sino {
+        contador = 50;
+    }
+} sino {
+    contador = 0;
+}
+
+// Error léxico + sintáctico: Múltiples problemas
+entero 123variable@ = "valor" sin cerrar
+
+// Error semántico: Múltiples incompatibilidades
+booleano flag = 123 + "texto" * verdadero;
+
+// Correcto: Comparaciones válidas
+si (precio >= 100.0) {
+    precio = precio * 0.9;
+}
+
+si (nombre != "Producto") {
+    activo = falso;
+}
+
+// Error léxico: Símbolo inválido en expresión
+entero calculo = (50 # 25) + 10;
+
+// Correcto: Uso de todos los tipos de datos
+entero edad_persona = 30;
+decimal altura = 1.75;
+cadena nombre_persona = "Juan";
+booleano es_mayor = verdadero;
+
+// ==========================================
+// FIN DEL ARCHIVO DE PRUEBA
+// ==========================================
+

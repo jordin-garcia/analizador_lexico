@@ -1,0 +1,27 @@
+// ========================================
+// CASOS LÉXICOS - ARCHIVO DE PRUEBA
+// ========================================
+
+// CASO 1: Error - Comentario de bloque sin cerrar
+/* Este es un comentario
+que nunca se cierra
+entero y = 20;
+
+// CASO 2: Error - Cadena sin cerrar
+cadena texto = "Hola mundo;
+
+// CASO 3: Error - Carácter inválido (@)
+entero valor@ = 50;
+
+// CASO 4: Error - Identificador con carácter no permitido (ñ)
+entero año = 2024;
+
+// CASO 5: Error - Identificador con carácter Unicode (emoji)
+entero valor2😀 = 42;
+
+// CASO 6: Error - Símbolo inválido (#)
+entero #codigo = 456;
+
+// CASO 7: Error - Operador inválido (^)
+entero xor = 5 ^ 3;
+

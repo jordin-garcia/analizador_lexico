@@ -1,126 +1,189 @@
-# Manual de Usuario: Analizador Léxico
+# Manual de Usuario · Analizador Léxico, Sintáctico y Semántico
 
 ## 1. Introducción
 
-Este programa es una herramienta diseñada para procesar archivos de texto o código fuente escrito en un lenguaje de programación simple. Su función principal es realizar un **análisis léxico**, que consiste en descomponer el texto de entrada en una secuencia de componentes con significado propio, llamados **tokens**.
+Esta aplicación permite estudiar un lenguaje de programación académico a través de las tres fases clásicas del front-end de un compilador:
 
-La aplicación cuenta con una interfaz gráfica intuitiva que permite cargar archivos, analizar su contenido y visualizar los resultados de forma clara y organizada, incluyendo la detección y reporte de errores léxicos.
+1. **Análisis Léxico**: transforma el texto en una secuencia de tokens.
+2. **Análisis Sintáctico**: verifica que la secuencia de tokens respete la gramática del lenguaje y construye un Árbol de Sintaxis Abstracta (AST).
+3. **Análisis Semántico**: valida reglas de significado (tipos, ámbitos, redeclaraciones, etc.) sobre el AST.
+
+El flujo es completamente automatizado desde una interfaz gráfica: al presionar “Analizar Código” la aplicación ejecuta cada fase en orden y detiene el proceso en cuanto se detecta un error, mostrando información detallada al usuario.
 
 ## 2. Requisitos del Sistema
 
-- **Sistema Operativo:** Windows, macOS o Linux.
-- **Python:** Versión 3.6 o superior.
-- **Librerías:** No se requieren librerías externas, ya que el programa utiliza la librería estándar de Python (`tkinter` para la interfaz gráfica).
+- **Sistema operativo**: Windows, macOS o Linux.
+- **Python**: versión 3.6 o posterior.
+- **Dependencias**: únicamente la biblioteca estándar de Python (`tkinter`), ya incluida en instalaciones oficiales.
 
 ## 3. Instalación y Ejecución
 
-El programa no requiere un proceso de instalación formal. Solo necesitas tener Python instalado en tu sistema.
-
-Para ejecutar la aplicación, sigue estos pasos:
-
-1. Abre una terminal o línea de comandos.
-2. Navega hasta el directorio raíz del proyecto (`analizador_lexico`).
-3. Ejecuta el siguiente comando:
+1. Asegúrate de tener Python instalado y disponible en la variable de entorno `PATH`.
+2. Descarga o clona el repositorio del proyecto.
+3. Abre una terminal y sitúate en la carpeta raíz `analizador_lexico`.
+4. Ejecuta:
    ```bash
    python src/main.py
    ```
-4. Al ejecutar el comando, se abrirá la ventana principal de la aplicación.
+5. Se abrirá la ventana principal con la interfaz gráfica.
 
 ## 4. Guía de Uso de la Interfaz Gráfica
 
-La interfaz se divide en tres áreas principales: la barra de botones, el editor de código fuente y el área de resultados.
+La ventana está dividida en tres zonas: barra de botones, editor de código (izquierda) y área de resultados (derecha). Los widgets utilizan un tema oscuro para mejorar la legibilidad.
 
-![Imagen de la interfaz de usuario](https-placeholder-for-image.com) *(Nota: Esto es un marcador de posición para una imagen de la interfaz)*
+### 4.1 Barra de botones
 
-### 4.1. Barra de Botones
+- **Cargar Archivo (.txt)**: abre un diálogo para seleccionar archivos de texto. El contenido se carga en el editor usando UTF-8; si falla, se intenta con Latin-1.
+- **Analizar Código**: lanza la cadena de análisis. Si existe algún error en una etapa, se interrumpe el proceso y el error se muestra en la tabla principal con su línea.
+- **Limpiar**: borra el contenido del editor y vacía todas las tablas de resultados, restaurando los encabezados predeterminados.
+- **Guardar Documento**: exporta el contenido del editor a un archivo `.txt` elegido por el usuario.
 
-En la parte superior de la ventana encontrarás tres botones principales:
+### 4.2 Editor de código fuente
 
-- **Cargar Archivo (.txt):**
+- Editor multilinea con fuente monoespaciada y numeración de líneas sincronizada.
+- Permite escribir o pegar código directamente.
+- Cuenta con desplazamiento horizontal y vertical independiente.
 
-  - **Función:** Abre un explorador de archivos para que puedas seleccionar y cargar un archivo de texto (`.txt`).
-  - **Uso:** Al hacer clic, selecciona un archivo. Su contenido se mostrará automáticamente en el área de "Código Fuente".
-- **Analizar Código:**
+### 4.3 Área de resultados
 
-  - **Función:** Inicia el análisis léxico del contenido que se encuentra en el editor de "Código Fuente".
-  - **Uso:** Después de escribir o cargar tu código, haz clic en este botón para ver los resultados en las tablas de la derecha.
-- **Limpiar:**
+Se compone de tres `Treeview` (tablas):
 
-  - **Función:** Restablece la interfaz a su estado inicial.
-  - **Uso:** Borra todo el texto del editor de "Código Fuente" y limpia las tablas de resultados.
+1. **Tokens y Errores**
+   - En análisis exitoso muestra todos los tokens en orden (tipo, lexema y línea).
+   - En caso de error, los encabezados cambian dinámicamente para listar tipo de error, detalle y línea.
+2. **Resumen de Tokens**
+   - Solo se rellena si las tres fases se completan sin errores.
+   - Agrupa tokens por categoría de alto nivel (Operador, Signo, Identificador, etc.) y muestra la cantidad de apariciones de cada lexema.
+3. **Tabla de Símbolos**
+   - Disponible únicamente tras un análisis exitoso.
+   - Incluye nombre, tipo, categoría (variable, función, parámetro), ámbito y línea de declaración.
 
-### 4.2. Área de Código Fuente
+Al finalizar un análisis sin errores se muestra un cuadro de diálogo confirmando el éxito de las tres fases.
 
-Este es el cuadro de texto grande ubicado a la izquierda. Aquí puedes:
+## 5. Descripción de las Fases de Análisis
 
-- Escribir código directamente.
-- Pegar código desde el portapapeles.
-- Ver el contenido de un archivo cargado con el botón "Cargar Archivo".
+### 5.1 Análisis Léxico
 
-### 4.3. Área de Resultados
+- Reconoce comentarios (`//`, `/* ... */`), números enteros y decimales, cadenas entre comillas simples o dobles, identificadores (letra o guion bajo inicial seguido de letras/dígitos/guion bajo), operadores (`+`, `-`, `*`, `/`, `%`, `==`, `!=`, `<=`, `>=`, `<`, `>`), delimitadores (`(`, `)`, `{`, `}`, `;`, `,`, `.`) y espacios en blanco.
+- Detecta previamente comentarios de bloque y cadenas sin cerrar y reporta un error específico si faltan los delimitadores de cierre.
+- Cualquier carácter fuera del conjunto aceptado (ej. `@`, `#`, letras con tilde, emojis) genera un token `ERROR` con el detalle “Token inesperado”.
+- Algunos patrones aparentemente “léxicos” (como `entero 9variable = 10;` o `decimal x = 12.3.4;`) se fraccionan en tokens válidos, por lo que su invalidación ocurre en la fase sintáctica. Este comportamiento es intencional y mantiene simple la especificación léxica.
 
-Ubicada a la derecha, esta área se divide en dos tablas que muestran la salida del análisis.
+**Ejemplo de error léxico:**
+```
+entero valor@ = 10;   // '@' no pertenece al alfabeto del lenguaje
+```
 
-- **Tabla "Tokens y Errores" (Superior):**
+### 5.2 Análisis Sintáctico
 
-  - **Si el análisis es exitoso:** Muestra una lista completa de todos los tokens encontrados en el orden en que aparecen. Las columnas son:
-    - `Tipo`: La categoría del token (p. ej., `PALABRA_RESERVADA`, `IDENTIFICADOR`, `NUMERO_ENTERO`).
-    - `Token`: El valor exacto del token (p. ej., `si`, `mi_variable`, `123`).
-    - `Línea`: El número de línea donde se encontró el token.
-  - **Si se encuentran errores:** La tabla cambia para mostrar **únicamente** los errores léxicos detectados. Las columnas son:
-    - `Error`: Indica que el token es de tipo `ERROR`.
-    - `Detalle`: Describe el error, mostrando el carácter o secuencia no reconocida.
-    - `Línea`: El número de línea donde ocurrió el error.
-- **Tabla "Resumen de Tokens" (Inferior):**
+- Implementa un parser descendente recursivo que construye un AST.
+- Reglas cubiertas: declaraciones de variables (`TIPO id = expresión;`), funciones (`TIPO id ( parámetros ) { bloque }`), estructuras `si/sino`, `mientras`, `hacer ... mientras`, asignaciones y expresiones con precedencia (`+/-` sobre `*//%`).
+- Reporta errores con línea y detalle, por ejemplo: falta de `;`, llaves o paréntesis, tipos no reconocidos, operadores duplicados, comparadores inválidos (`===`), funciones con formato incorrecto o bloques sin cerrar.
 
-  - Esta tabla **solo se llena si el análisis es exitoso** (sin errores).
-  - Muestra un resumen de cuántas veces aparece cada token en el código, agrupados por tipo. Las columnas son:
-    - `Tipo`: La categoría general del token (`Palabra Reservada`, `Identificador`, `Operador`, etc.).
-    - `Token`: El valor del token.
-    - `Cantidad`: El número total de veces que ese token aparece en el código.
+**Ejemplo de error sintáctico:**
+```
+entero x = 10        // Falta ';'
+si (x > 5 {          // Falta ')'
+decimal y = 12.3.4;  // El parser detecta un '.' en posición inesperada
+```
 
-## 5. Cómo Probar el Analizador
+### 5.3 Análisis Semántico
 
-Dentro de la carpeta `tests/` del proyecto, hemos incluido dos archivos para que puedas probar el funcionamiento del programa:
+- Recorre el AST con una tabla de símbolos y maneja ámbitos anidados para funciones.
+- Validaciones principales:
+  - Tipos declarados válidos (`entero`, `decimal`, `cadena`, `booleano`).
+  - Variables no redeclaradas en el mismo ámbito y no utilizadas sin declarar.
+  - Asignaciones con tipos compatibles (permite conversión implícita de `entero` a `decimal`).
+  - Operaciones binarias compatibles según una matriz de tipos (suma, resta, multiplicación, división, módulo, concatenación de cadenas).
+  - Funciones con mínimo dos parámetros, sin nombres duplicados y sin redeclaraciones.
+  - Comparaciones con tipos compatibles (más la excepción entero/decimal).
 
-- `casos_positivos.txt`: Contiene código escrito correctamente según las reglas del lenguaje.
-- `casos_negativos.txt`: Contiene código con varios errores léxicos intencionados.
+**Ejemplo de error semántico:**
+```
+entero numero = 10;
+cadena texto = "hola";
+entero resultado = numero + texto;  // Tipos incompatibles en la operación
+```
 
-### 5.1. Probar un Caso Exitoso
+## 6. Archivos de Prueba
 
-1. Ejecuta el programa.
-2. Haz clic en **"Cargar Archivo"**.
-3. Selecciona el archivo `tests/casos_positivos.txt`.
-4. Haz clic en **"Analizar Código"**.
-5. **Resultado esperado:**
-   - La tabla "Tokens y Errores" se llenará con la lista completa de tokens reconocidos.
-   - La tabla "Resumen de Tokens" mostrará el conteo de cada token.
+Dentro de `tests/` se incluyen casos preparados para ejercitar cada fase:
 
-### 5.2. Probar un Caso con Errores
+- `casos_lexicos.txt`: únicamente ejemplos que el analizador léxico rechaza (cadenas/comentarios sin cerrar, caracteres ilegales).
+- `casos_sintacticos.txt`: combinaciones que pasan la fase léxica pero violan reglas gramaticales.
+- `casos_semanticos.txt`: programas que superan léxico y sintaxis pero incumplen reglas semánticas.
+- `casos_mixtos.txt`: mezcla de fragmentos correctos y errores distribuidos en las tres fases para comprobar el flujo completo.
 
-1. Si es necesario, haz clic en **"Limpiar"** para borrar los resultados anteriores.
-2. Haz clic en **"Cargar Archivo"**.
-3. Selecciona el archivo `tests/casos_negativos.txt`.
-4. Haz clic en **"Analizar Código"**.
-5. **Resultado esperado:**
-   - La tabla "Tokens y Errores" mostrará únicamente las líneas que contienen caracteres inválidos (p. ej., `@`, `$`, `~`, `?`, `#`).
-   - La tabla "Resumen de Tokens" permanecerá vacía.
+**Pasos sugeridos para probar:**
 
-## 6. Lenguaje Soportado (Tokens Reconocidos)
+1. Inicia la aplicación (`python src/main.py`).
+2. Pulsa **Cargar Archivo** y selecciona uno de los archivos anteriores.
+3. Presiona **Analizar Código**.
+4. Observa los resultados: si se encuentra un error, solo la tabla superior mostrará la descripción; si todo es correcto, verás tokens, resumen y tabla de símbolos.
 
-El analizador está configurado para reconocer los siguientes tipos de tokens:
+## 7. Lenguaje Soportado
 
-- **Palabras Reservadas:** `entero`, `decimal`, `booleano`, `cadena`, `si`, `sino`, `mientras`, `hacer`, `verdadero`, `falso`.
-- **Identificadores:** Nombres de variables que comiencen con una letra o guion bajo, seguidos de letras, números o guiones bajos (p. ej., `mi_var`, `contador1`).
-- **Números:** Enteros (`100`) y decimales (`3.14`).
-- **Cadenas de Texto:** Texto entre comillas simples (`'hola'`) o dobles (`"mundo"`).
-- **Operadores:**
-  - Aritméticos: `+`, `-`, `*`, `/`, `%`
-  - Asignación: `=`
-  - Comparación: `==`, `!=`, `<`, `>`, `<=`, `>=`
-- **Signos y Delimitadores:** `(`, `)`, `{`, `}`, `;`, `,`, `.`
-- **Comentarios:**
-  - De una línea: `// Esto es un comentario`
-  - De múltiples líneas: `/* ... */`
+### 7.1 Tokens y alfabeto
 
-Cualquier carácter o secuencia que no encaje en estas categorías será reportado como un **`ERROR`**.
+- **Palabras reservadas**: `entero`, `decimal`, `booleano`, `cadena`, `si`, `sino`, `mientras`, `hacer`, `verdadero`, `falso`.
+- **Identificadores**: deben iniciar con letra (A-Z, a-z) o guion bajo `_` y continuar con letras, dígitos o guion bajo. Caracteres acentuados o especiales no están permitidos.
+- **Números**: `NUMERO_ENTERO` (`0`, `42`, `123`) y `NUMERO_DECIMAL` (`3.14`, `0.5`).
+- **Cadenas**: entre `'` o `"`, admiten secuencias escapadas (`\"`, `\\`, etc.).
+- **Operadores**: `+ - * / % = == != < > <= >=`.
+- **Delimitadores**: `(` `)` `{` `}` `;` `,` `.`
+- **Comentarios**: `//` hasta el fin de la línea y `/* ... */` multilínea.
+- Caracteres fuera de este conjunto generan `ERROR` léxico.
+
+### 7.2 Declaraciones y estructuras
+
+```
+entero edad = 25;
+decimal precio = 99.99;
+cadena nombre = "Juan";
+booleano activo = verdadero;
+
+entero sumar(entero a, entero b) {
+    entero resultado = a + b;
+}
+
+si (edad >= 18) {
+    activo = verdadero;
+} sino {
+    activo = falso;
+}
+
+mientras (contador < 100) {
+    contador = contador + 1;
+}
+
+hacer {
+    contador = contador - 1;
+} mientras (contador > 0)
+```
+
+### 7.3 Compatibilidad de tipos (resumen)
+
+| Operación | Tipos compatibles | Resultado |
+|-----------|-------------------|-----------|
+| `+`, `-`, `*`, `/`, `%` | `entero` ↔ `entero` | `entero` |
+| `+`, `-`, `*`, `/` | `decimal` ↔ `decimal` | `decimal` |
+| `+`, `-`, `*`, `/` | `entero` ↔ `decimal` | `decimal` |
+| `+` | `cadena` ↔ `cadena` | `cadena` (concatenación) |
+
+- La asignación permite `decimal variable = entero_expr;` como conversión implícita.
+- No se permiten otras conversiones ni operaciones mixtas (ej. `entero + cadena`).
+- Las comparaciones requieren tipos compatibles; se admite `entero` con `decimal`.
+
+## 8. Solución de Problemas
+
+- **La ventana no abre**: confirma que estás ejecutando `python src/main.py` desde la carpeta del proyecto y que tu instalación de Python incluye `tkinter`.
+- **No puedo cargar un archivo**: verifica que sea `.txt` y que su codificación sea UTF-8 o Latin-1. El programa intenta ambas automáticamente.
+- **Errores inesperados del analizador**:
+  - Recuerda que el proceso se detiene en la primera fase con fallos. Si aparece un error léxico, corrígelo antes de esperar diagnósticos sintácticos o semánticos.
+  - Revisa la línea reportada; la numeración del editor y de los mensajes coincide.
+- **Resultados vacíos tras varios análisis**: utiliza el botón **Limpiar** para reiniciar la interfaz antes de una nueva prueba.
+
+---
+
+**Última actualización:** noviembre 2025  
+**Versión:** 2.1 (GUI con análisis completo)
